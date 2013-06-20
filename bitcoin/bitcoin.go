@@ -18,11 +18,11 @@ type LoginReply struct {
 }
 
 type Trade struct {
-    Amount float64 `json:"amount"`
+    //Amount float64 `json:"amount"`
     AmountInt string `json:"amount_int"`
     Date int `json:"date"`
     Item string `json:"item"`
-    Price float64 `json:"price"`
+    //Price float64 `json:"price"`
     PriceCurrency string `json:"price_currency"`
     PriceInt string `json:"price_int"`
     Primary string `json:"primary"`
@@ -33,11 +33,31 @@ type Trade struct {
 }
 
 type TradeFeed struct {
+    Header
+    Trade `json:"trade"`
+}
+
+type Depth struct {
+    Currency string `json:"currency"`
+    Item string `json:"item"`
+    Now string `json:"now"`
+    Price string `json:"price"`
+    PriceInt string `json:"price_int"`
+    TotalVolumeInt string `json:"total_volume_int"`
+    Type string `json:"type_str"`
+    VolumeInt string `json:"volume_int"`
+}
+
+type DepthFeed struct {
+    Header
+    Depth `json:"depth"`
+}
+
+type Header struct {
     Channel string `json:"channel"`
     Op string `json:"op"`
     Origin string `json:"origin"`
     Private string `json:"private"`
-    Trade `json:"trade"`
 }
 
 //=======================
@@ -76,6 +96,6 @@ func main() {
             panic(err.Error())
         }
         
-        fmt.Println(msg.Trade, msg.Trade.Amount, msg.Trade.Price, msg.Trade.Item)
+        fmt.Println(msg.Trade)
     }
 }
