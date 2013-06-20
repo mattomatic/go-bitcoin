@@ -19,9 +19,17 @@ type LoginReply struct {
 
 type Trade struct {
     Amount float64 `json:"amount"`
+    AmountInt string `json:"amount_int"`
     Date int `json:"date"`
     Item string `json:"item"`
     Price float64 `json:"price"`
+    PriceCurrency string `json:"price_currency"`
+    PriceInt string `json:"price_int"`
+    Primary string `json:"primary"`
+    Properties string `json:"properties"`
+    Tid string `json:"tid"`
+    TradeType string `json:"bid"`
+    Type string `json:"type"`
 }
 
 type TradeFeed struct {
@@ -29,7 +37,7 @@ type TradeFeed struct {
     Op string `json:"op"`
     Origin string `json:"origin"`
     Private string `json:"private"`
-    Trade
+    Trade `json:"trade"`
 }
 
 //=======================
@@ -68,6 +76,6 @@ func main() {
             panic(err.Error())
         }
         
-        fmt.Println(msg.Trade)
+        fmt.Println(msg.Trade, msg.Trade.Amount, msg.Trade.Price, msg.Trade.Item)
     }
 }
