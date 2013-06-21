@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+const (
+	ExchangeId = "MTGOX"
+)
+
 type Feed struct {
 	Type      string
 	Timestamp time.Time
@@ -50,23 +54,24 @@ type DepthFeed struct {
 }
 
 type TickerField struct {
-	Currency string `json:"currency"`
-	Display  string `json:"display"`
-	Value    string `json:"value"`
-	ValueInt string `json:"value_int"`
+	currency string `json:"currency"`
+	display  string `json:"display"`
+	value    string `json:"value"`
+	valueInt string `json:"value_int"`
 }
 
 type Ticker struct {
-	Average      TickerField `json:"avg"`
-	Bid          TickerField `json:"buy"`
-	Ask          TickerField `json:"sell"`
-	Last         TickerField `json:"last"`
-	LastLocal    TickerField `json:"last_local"`
-	LastOriginal TickerField `json:"last_orig"`
-	High         TickerField `json:"high"`
-	Low          TickerField `json:"low"`
-	Volume       TickerField `json:"vol"`
-	Vwap         TickerField `json:"vwap"`
+	average      TickerField `json:"avg"`
+	bid          TickerField `json:"buy"`
+	ask          TickerField `json:"sell"`
+	last         TickerField `json:"last"`
+	lastLocal    TickerField `json:"last_local"`
+	lastOriginal TickerField `json:"last_orig"`
+	high         TickerField `json:"high"`
+	low          TickerField `json:"low"`
+	volume       TickerField `json:"vol"`
+	vwap         TickerField `json:"vwap"`
+	timestamp    time.Time
 }
 
 type TickerFeed struct {

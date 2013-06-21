@@ -1,11 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/mattomatic/go-bitcoin/mtgox"
-	"github.com/mattomatic/go-bitcoin/common"
-	"time"
+	"github.com/mattomatic/go-bitcoin/bitstamp"
+	"io/ioutil"
+	"net/http"
 )
 
 func init() {
@@ -13,29 +14,19 @@ func init() {
 }
 
 func main() {
-	a := mtgox.NewClient("ws://websocket.mtgox.com:80")
-	a.ToggleTradeFeeds()
-	//a.ToggleDepthFeeds()
-	//a.ToggleTickerFeeds()
-	afeeds := a.Feeds()
+	resp, err := http.Get("https://www.bitstamp.net/api/ticker/")
 
-	b := mtgox.NewClient("ws://websocket.mtgox.com:80")
-	b.ToggleTradeFeeds()
-	//b.ToggleDepthFeeds()
-	//b.ToggleTickerFeeds()
-	bfeeds := b.Feeds()
-
-	var afeed, bfeed *mtgox.Feed
-
-	for {
-		select {
-		case afeed = <-afeeds:
-			fmt.Println("diff:", time.Now().Sub(afeed.Timestamp))
-			fmt.Println("trade:", common.TradeString(afeed.Message.(common.Trade)))
-		case bfeed = <-bfeeds:
-			fmt.Println("diff:", time.Now().Sub(bfeed.Timestamp))
-			fmt.Println("bfeed:", bfeed.Timestamp.String(), bfeed.Message)
-			fmt.Println("trade:", common.TradeString(bfeed.Message.(common.Trade)))
-		}
+	if err != nil {
+		panic(err.Error())
 	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	ticker := &bitstamp.Ticker{}
+	json.Unmarshal(body, ticker)
+	fmt.Println(ticker)
 }

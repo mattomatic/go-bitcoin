@@ -20,3 +20,14 @@ type Trade interface {
 	Currency() Currency
 	TradeId() TradeId
 }
+
+type Ticker interface {
+	Exchange() Exchange
+	Symbol() Symbol
+	Timestamp() time.Time
+	Bid() Price
+	Ask() Price
+	High() Price
+	Low() Price
+	Volume() Volume
+}

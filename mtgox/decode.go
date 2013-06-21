@@ -24,6 +24,7 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
 		feed.Message = msg
 	case "ticker":
 		msg := &TickerFeed{}
+		msg.timestamp = feed.Timestamp
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
 	case "trade":
