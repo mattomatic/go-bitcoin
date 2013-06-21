@@ -2,9 +2,12 @@ package mtgox
 
 import (
 	"encoding/json"
+	"time"
 )
 
 func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
+	feed.Timestamp = time.Now()
+
 	header := &Header{}
 	err = json.Unmarshal(bytes, header)
 

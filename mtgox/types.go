@@ -1,8 +1,13 @@
 package mtgox
 
+import (
+	"time"
+)
+
 type Feed struct {
-	Type    string
-	Message interface{}
+	Type      string
+	Timestamp time.Time
+	Message   interface{}
 }
 
 type LoginReply struct {

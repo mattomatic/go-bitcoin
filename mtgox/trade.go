@@ -18,8 +18,8 @@ func (t *Trade) Symbol() common.Symbol {
 	return common.Symbol(t.Item)
 }
 
-func (t *Trade) Timestamp() common.Timestamp {
-	return common.Timestamp(time.Unix(int64(t.Date), 0))
+func (t *Trade) Timestamp() time.Time {
+	return time.Unix(int64(t.Date), 0)
 }
 
 func (t *Trade) Volume() common.Volume {
