@@ -2,16 +2,11 @@ package mtgox
 
 import (
 	"github.com/mattomatic/go-bitcoin/common"
-	"strconv"
 	"time"
 )
 
-const (
-	Divisor = 1e8
-)
-
 func (t *Trade) Exchange() common.Exchange {
-	return common.Exchange("MTGOX")
+	return common.Exchange(ExchangeId)
 }
 
 func (t *Trade) Symbol() common.Symbol {
@@ -23,23 +18,11 @@ func (t *Trade) Timestamp() time.Time {
 }
 
 func (t *Trade) Volume() common.Volume {
-	volume, err := strconv.Atoi(t.AmountInt)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return common.Volume(volume / Divisor)
+	return getVolume(t.AmountInt)
 }
 
 func (t *Trade) Price() common.Price {
-	price, err := strconv.Atoi(t.PriceInt)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return common.Price(price / Divisor)
+	return getPrice(t.PriceInt)
 }
 
 func (t *Trade) Currency() common.Currency {
