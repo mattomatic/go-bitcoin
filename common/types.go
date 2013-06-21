@@ -11,23 +11,43 @@ type Currency string
 type Symbol string
 type TradeId string
 
+type FeedType int
+
+const (
+	TickerFeed FeedType = iota
+	DepthFeed
+	TradeFeed
+)
+
 type Trade interface {
-	Exchange() Exchange
-	Symbol() Symbol
-	Timestamp() time.Time
-	Volume() Volume
-	Price() Price
-	Currency() Currency
-	TradeId() TradeId
+	GetExchange() Exchange
+	GetSymbol() Symbol
+	GetTimestamp() time.Time
+	GetVolume() Volume
+	GetPrice() Price
+	GetCurrency() Currency
+	GetTradeId() TradeId
 }
 
 type Ticker interface {
-	Exchange() Exchange
-	Symbol() Symbol
-	Timestamp() time.Time
-	Bid() Price
-	Ask() Price
-	High() Price
-	Low() Price
-	Volume() Volume
+	GetExchange() Exchange
+	GetSymbol() Symbol
+	GetTimestamp() time.Time
+	GetBid() Price
+	GetAsk() Price
+	GetHigh() Price
+	GetLow() Price
+	GetVolume() Volume
+}
+
+type Feed struct {
+	Type      FeedType
+	Timestamp time.Time
+	Message   interface{}
+}
+
+type Client interface {
+	ToggleTickerFeeds()
+	ToggleAsync()
+	Channel() <-chan *Feed
 }

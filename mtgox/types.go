@@ -1,6 +1,7 @@
 package mtgox
 
 import (
+	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
 
@@ -8,11 +9,7 @@ const (
 	ExchangeId = "MTGOX"
 )
 
-type Feed struct {
-	Type      string
-	Timestamp time.Time
-	Message   interface{}
-}
+type Feed common.Feed
 
 type LoginReply struct {
 	Op      string `json:"op"`

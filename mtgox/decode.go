@@ -2,6 +2,7 @@ package mtgox
 
 import (
 	"encoding/json"
+	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
 
@@ -15,19 +16,19 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
 		panic(err.Error())
 	}
 
-	feed.Type = header.Private
+	feedType := getFeedType(header.Private)
 
-	switch feed.Type {
-	case "depth":
+	switch feedType {
+	case common.DepthFeed:
 		msg := &DepthFeed{}
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
-	case "ticker":
+	case common.TickerFeed:
 		msg := &TickerFeed{}
 		msg.timestamp = feed.Timestamp
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
-	case "trade":
+	case common.TradeFeed:
 		msg := &TradeFeed{}
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
@@ -36,4 +37,17 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
 	}
 
 	return err
+}
+
+func getFeedType(s string) common.FeedType {
+	switch s {
+	case "depth":
+		return common.DepthFeed
+	case "trade":
+		return common.TradeFeed
+	case "ticker":
+		return common.TickerFeed
+	default:
+		panic("could not parse feed type")
+	}
 }

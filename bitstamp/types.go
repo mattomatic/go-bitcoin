@@ -5,11 +5,11 @@ const (
 )
 
 type Ticker struct {
-	timestamp string `json:"timestamp"`
-	bid       string `json:"bid"`
-	ask       string `json:"ask"`
-	high      string `json:"high"`
-	low       string `json:"low"`
-	last      string `json:"last"`
-	volume    string `json:"volume"`
+	Timestamp string `json:"timestamp"`
+	Bid       string `json:"bid"`
+	Ask       string `json:"ask"`
+	High      string `json:"high"`
+	Low       string `json:"low"`
+	Last      string `json:"last"`
+	Volume    string `json:"volume"`
 }

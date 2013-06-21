@@ -24,5 +24,11 @@ func getInt(amount string) int {
 }
 
 func getFloat(amount string) float64 {
-	return float64(getInt(amount))
+	x, err := strconv.ParseFloat(amount, 64)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return x
 }

@@ -5,34 +5,34 @@ import (
 	"time"
 )
 
-func (t *Ticker) Exchange() common.Exchange {
+func (t *Ticker) GetExchange() common.Exchange {
 	return common.Exchange(ExchangeId)
 }
 
-func (t *Ticker) Symbol() common.Symbol {
+func (t *Ticker) GetSymbol() common.Symbol {
 	return common.Symbol("BTC")
 }
 
-func (t *Ticker) Timestamp() time.Time {
-	return time.Unix(int64(getInt(t.timestamp)), 0)
+func (t *Ticker) GetTimestamp() time.Time {
+	return time.Unix(int64(getInt(t.Timestamp)), 0)
 }
 
-func (t *Ticker) Bid() common.Price {
-	return getPrice(t.bid)
+func (t *Ticker) GetBid() common.Price {
+	return getPrice(t.Bid)
 }
 
-func (t *Ticker) Ask() common.Price {
-	return getPrice(t.ask)
+func (t *Ticker) GetAsk() common.Price {
+	return getPrice(t.Ask)
 }
 
-func (t *Ticker) High() common.Price {
-	return getPrice(t.high)
+func (t *Ticker) GetHigh() common.Price {
+	return getPrice(t.High)
 }
 
-func (t *Ticker) Low() common.Price {
-	return getPrice(t.low)
+func (t *Ticker) GetLow() common.Price {
+	return getPrice(t.Low)
 }
 
-func (t *Ticker) Volume() common.Volume {
-	return getVolume(t.volume)
+func (t *Ticker) GetVolume() common.Volume {
+	return getVolume(t.Volume)
 }

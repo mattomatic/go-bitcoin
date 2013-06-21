@@ -3,17 +3,24 @@ package mtgox
 import (
 	"code.google.com/p/go.net/websocket"
 	"encoding/json"
+	"github.com/mattomatic/go-bitcoin/common"
+)
+
+const (
+	MtGoxUrl = "ws://websocket.mtgox.com:80"
+	Protocol = "ws"
+	LocalUrl = "ws://localhost"
 )
 
 type Client struct {
 	conn    *websocket.Conn
 	encoder *json.Encoder
 	decoder *json.Decoder
-	feeds   chan *Feed
+	feeds   chan *common.Feed
 }
 
-func NewClient(url string) *Client {
-	conn, err := websocket.Dial(url, "ws", "ws://localhost")
+func NewClient() *Client {
+	conn, err := websocket.Dial(MtGoxUrl, Protocol, LocalUrl)
 
 	if err != nil {
 		panic(err.Error())
@@ -21,7 +28,7 @@ func NewClient(url string) *Client {
 
 	encoder := json.NewEncoder(conn)
 	decoder := json.NewDecoder(conn)
-	feeds := make(chan *Feed)
+	feeds := make(chan *common.Feed)
 
 	client := &Client{conn, encoder, decoder, feeds}
 
@@ -32,12 +39,10 @@ func NewClient(url string) *Client {
 		panic(err.Error())
 	}
 
-	go client.loop()
-
 	return client
 }
 
-func (c *Client) Feeds() chan *Feed {
+func (c *Client) Channel() <-chan *common.Feed {
 	return c.feeds
 }
 
@@ -53,6 +58,10 @@ func (c *Client) ToggleDepthFeeds() {
 	c.toggle("depth")
 }
 
+func (c *Client) ToggleAsync() {
+	go c.async()
+}
+
 func (c *Client) toggle(feed string) {
 	msg := map[string]string{"op": "mtgox.subscribe", "type": feed}
 	err := c.encoder.Encode(&msg)
@@ -62,8 +71,9 @@ func (c *Client) toggle(feed string) {
 	}
 }
 
-func (c *Client) loop() {
+func (c *Client) async() {
 	feed := &Feed{}
+	copy := &common.Feed{}
 
 	for {
 		err := c.decoder.Decode(&feed)
@@ -72,6 +82,9 @@ func (c *Client) loop() {
 			panic(err.Error())
 		}
 
-		c.feeds <- feed
+		copy.Type = feed.Type
+		copy.Timestamp = feed.Timestamp
+		copy.Message = feed.Message
+		c.feeds <- copy
 	}
 }

@@ -1,12 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/mattomatic/go-bitcoin/bitstamp"
-	"io/ioutil"
-	"net/http"
+	"github.com/mattomatic/go-bitcoin/mtgox"
 )
 
 func init() {
@@ -14,19 +12,23 @@ func init() {
 }
 
 func main() {
-	resp, err := http.Get("https://www.bitstamp.net/api/ticker/")
+	bs := bitstamp.NewClient()
+	bs.ToggleTickerFeeds()
+	bs.ToggleAsync()
 
-	if err != nil {
-		panic(err.Error())
+	gx := mtgox.NewClient()
+	gx.ToggleTickerFeeds()
+	gx.ToggleAsync()
+
+	bsfeeds := bs.Channel()
+	gxfeeds := gx.Channel()
+
+	for {
+		select {
+		case bsfeed := <-bsfeeds:
+			fmt.Println("bs", bsfeed)
+		case gxfeed := <-gxfeeds:
+			fmt.Println("gx", gxfeed)
+		}
 	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	ticker := &bitstamp.Ticker{}
-	json.Unmarshal(body, ticker)
-	fmt.Println(ticker)
 }
