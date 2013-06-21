@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/mattomatic/go-bitcoin/common"
 	"github.com/mattomatic/go-bitcoin/mtgox"
+	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
 
@@ -15,10 +15,14 @@ func init() {
 func main() {
 	a := mtgox.NewClient("ws://websocket.mtgox.com:80")
 	a.ToggleTradeFeeds()
+	//a.ToggleDepthFeeds()
+	//a.ToggleTickerFeeds()
 	afeeds := a.Feeds()
 
 	b := mtgox.NewClient("ws://websocket.mtgox.com:80")
 	b.ToggleTradeFeeds()
+	//b.ToggleDepthFeeds()
+	//b.ToggleTickerFeeds()
 	bfeeds := b.Feeds()
 
 	var afeed, bfeed *mtgox.Feed
@@ -26,15 +30,12 @@ func main() {
 	for {
 		select {
 		case afeed = <-afeeds:
-			trade := afeed.Message.(common.Trade)
-			fmt.Println("trade:", trade)
 			fmt.Println("diff:", time.Now().Sub(afeed.Timestamp))
-			fmt.Println("afeed:", afeed.Timestamp.String(), afeed.Message)
+			fmt.Println("trade:", common.TradeString(afeed.Message.(common.Trade)))
 		case bfeed = <-bfeeds:
-			trade := bfeed.Message.(common.Trade)
-			fmt.Println("trade:", trade)
 			fmt.Println("diff:", time.Now().Sub(bfeed.Timestamp))
 			fmt.Println("bfeed:", bfeed.Timestamp.String(), bfeed.Message)
+			fmt.Println("trade:", common.TradeString(bfeed.Message.(common.Trade)))
 		}
 	}
 }
