@@ -42,16 +42,3 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) error {
 
 	return err
 }
-
-func getFeedType(s string) common.FeedType {
-	switch s {
-	case "depth":
-		return common.DepthFeed
-	case "trade":
-		return common.TradeFeed
-	case "ticker":
-		return common.TickerFeed
-	default:
-		panic("could not parse feed type")
-	}
-}

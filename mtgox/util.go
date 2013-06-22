@@ -26,3 +26,16 @@ func getFloat(amount string) float64 {
 
 	return float64(x) / Divisor
 }
+
+func getFeedType(s string) common.FeedType {
+	switch s {
+	case "depth":
+		return common.DepthFeed
+	case "trade":
+		return common.TradeFeed
+	case "ticker":
+		return common.TickerFeed
+	default:
+		panic("could not parse feed type")
+	}
+}
