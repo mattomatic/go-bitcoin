@@ -60,6 +60,6 @@ type Order interface {
 }
 
 type OrderBook interface {
-    GetBids() []Order
-    GetAsks() []Order
+	GetBids() []Order
+	GetAsks() []Order
 }

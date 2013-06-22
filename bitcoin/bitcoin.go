@@ -7,11 +7,11 @@ import (
 )
 
 func main() {
-    var bs common.Client = bitstamp.NewClient()
-    bs.ToggleOrderBookFeeds()
-    bs.ToggleAsync()
-    
-    for feed := range bs.Channel() {
-        fmt.Println(feed)
-    }
+	var bs common.Client = bitstamp.NewClient()
+	bs.ToggleOrderBookFeeds()
+	bs.ToggleAsync()
+
+	for feed := range bs.Channel() {
+		fmt.Println(feed)
+	}
 }

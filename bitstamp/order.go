@@ -9,6 +9,10 @@ type Order struct {
 	Volume string
 }
 
+func (o *Order) GetExchange() common.Exchange {
+	return common.Exchange(ExchangeId)
+}
+
 func (o *Order) GetPrice() common.Price {
 	return getPrice(o.Price)
 }
