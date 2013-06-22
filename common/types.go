@@ -16,6 +16,7 @@ const (
 	TickerFeed FeedType = iota
 	OrderBookFeed
 	TradeFeed
+	DepthFeed
 )
 
 type Trade interface {
