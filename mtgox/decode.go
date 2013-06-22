@@ -35,7 +35,7 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) error {
 	default:
 		panic("unrecognized feed type!")
 	}
-	
+
 	if err != nil {
 		panic(err.Error())
 	}

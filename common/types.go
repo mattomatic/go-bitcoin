@@ -39,21 +39,21 @@ type Ticker interface {
 	GetVolume() Volume
 }
 
-type Feed struct { // todo: make this an interface
-	Type      FeedType
-	Timestamp time.Time
-	Message   interface{}
+type Feed interface {
+	GetType() FeedType
+	GetTimestamp() time.Time
+	GetMessage() interface{}
 }
 
 type Client interface {
 	ToggleTickerFeeds()
 	ToggleOrderBookFeeds()
 	ToggleAsync()
-	Channel() <-chan *Feed
+	Channel() <-chan Feed
 }
 
 type Order interface {
-    GetExchange() Exchange
-    GetVolume() Volume
-    GetPrice() Price
+	GetExchange() Exchange
+	GetVolume() Volume
+	GetPrice() Price
 }

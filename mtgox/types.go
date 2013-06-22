@@ -1,11 +1,5 @@
 package mtgox
 
-import (
-	"github.com/mattomatic/go-bitcoin/common"
-)
-
-type Feed common.Feed
-
 type LoginReply struct {
 	Op      string `json:"op"`
 	Message string `json:"message"`

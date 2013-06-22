@@ -16,7 +16,7 @@ type Client struct {
 	conn    *websocket.Conn
 	encoder *json.Encoder
 	decoder *json.Decoder
-	feeds   chan *common.Feed
+	feeds   chan common.Feed
 }
 
 func NewClient() *Client {
@@ -28,7 +28,7 @@ func NewClient() *Client {
 
 	encoder := json.NewEncoder(conn)
 	decoder := json.NewDecoder(conn)
-	feeds := make(chan *common.Feed)
+	feeds := make(chan common.Feed)
 
 	client := &Client{conn, encoder, decoder, feeds}
 
@@ -42,7 +42,7 @@ func NewClient() *Client {
 	return client
 }
 
-func (c *Client) Channel() <-chan *common.Feed {
+func (c *Client) Channel() <-chan common.Feed {
 	return c.feeds
 }
 
@@ -73,7 +73,6 @@ func (c *Client) toggle(feed string) {
 
 func (c *Client) async() {
 	feed := &Feed{}
-	copy := &common.Feed{}
 
 	for {
 		err := c.decoder.Decode(&feed)
@@ -82,9 +81,6 @@ func (c *Client) async() {
 			panic(err.Error())
 		}
 
-		copy.Type = feed.Type
-		copy.Timestamp = feed.Timestamp
-		copy.Message = feed.Message
-		c.feeds <- copy
+		c.feeds <- feed
 	}
 }
