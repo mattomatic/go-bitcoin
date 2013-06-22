@@ -58,3 +58,8 @@ type Order interface {
 	GetVolume() Volume
 	GetPrice() Price
 }
+
+type OrderBook interface {
+    GetBids() []Order
+    GetAsks() []Order
+}
