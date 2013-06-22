@@ -2,8 +2,6 @@ package bitstamp
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"net/http"
 )
 
 const (
@@ -35,20 +33,4 @@ func GetOrderBook() *OrderBook {
 	}
 
 	return book
-}
-
-func httpRequest(url string) []byte {
-	resp, err := http.Get(url)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return body
 }

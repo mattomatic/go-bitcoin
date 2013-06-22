@@ -2,6 +2,8 @@ package bitstamp
 
 import (
 	"github.com/mattomatic/go-bitcoin/common"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -36,4 +38,20 @@ func getFloat(amount string) float64 {
 	}
 
 	return x
+}
+
+func httpRequest(url string) []byte {
+	resp, err := http.Get(url)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return body
 }
