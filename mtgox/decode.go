@@ -16,22 +16,25 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) error {
 		panic(err.Error())
 	}
 
-	feedType := getFeedType(header.Private)
+	feed.Type = getFeedType(header.Private)
 
-	switch feedType {
+	switch feed.Type {
 	case common.DepthFeed:
 		msg := &DepthFeed{}
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
+
 	case common.TickerFeed:
 		msg := &TickerFeed{}
 		msg.Timestamp = feed.Timestamp
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
+
 	case common.TradeFeed:
 		msg := &TradeFeed{}
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
+
 	default:
 		panic("unrecognized feed type!")
 	}

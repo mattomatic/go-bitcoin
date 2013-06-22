@@ -10,17 +10,6 @@ type TradeFeed struct {
 	Trade `json:"trade"`
 }
 
-type Depth struct {
-	Currency       string `json:"currency"`
-	Item           string `json:"item"`
-	Now            string `json:"now"`
-	Price          string `json:"price"`
-	PriceInt       string `json:"price_int"`
-	TotalVolumeInt string `json:"total_volume_int"`
-	Type           string `json:"type_str"`
-	VolumeInt      string `json:"volume_int"`
-}
-
 type DepthFeed struct {
 	Header
 	Depth `json:"depth"`

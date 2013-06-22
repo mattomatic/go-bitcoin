@@ -1,0 +1,5 @@
+package mtgox
+
+import (
+	"testing"
+)

@@ -9,3 +9,11 @@ func TradeString(t Trade) string {
 func TickerString(t Ticker) string {
 	return fmt.Sprintf("%s:%s %f -- %f", t.GetExchange(), t.GetSymbol(), t.GetBid(), t.GetAsk())
 }
+
+func OrderString(o Order) string {
+	return fmt.Sprintf("%s:%s %f @ %f", o.GetExchange(), o.GetSymbol(), o.GetVolume(), o.GetPrice())
+}
+
+func OrderBookString(o OrderBook) string {
+	return fmt.Sprintf("bids: %s asks %s", o.GetBids(), o.GetAsks())
+}

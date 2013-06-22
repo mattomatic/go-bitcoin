@@ -17,6 +17,7 @@ type Client struct {
 	encoder *json.Encoder
 	decoder *json.Decoder
 	feeds   chan common.Feed
+	book    *OrderBook
 }
 
 func NewClient() *Client {
@@ -29,8 +30,9 @@ func NewClient() *Client {
 	encoder := json.NewEncoder(conn)
 	decoder := json.NewDecoder(conn)
 	feeds := make(chan common.Feed)
+	book := newOrderBook()
 
-	client := &Client{conn, encoder, decoder, feeds}
+	client := &Client{conn, encoder, decoder, feeds, book}
 
 	reply := &LoginReply{}
 	err = decoder.Decode(reply)
@@ -54,7 +56,7 @@ func (c *Client) ToggleTradeFeeds() {
 	c.toggle("trades")
 }
 
-func (c *Client) ToggleDepthFeeds() {
+func (c *Client) ToggleOrderBookFeeds() {
 	c.toggle("depth")
 }
 
@@ -71,6 +73,15 @@ func (c *Client) toggle(feed string) {
 	}
 }
 
+func (c *Client) convertDepthToBookFeed(feed *Feed) {
+	if feed.Type == common.DepthFeed {
+		feed.Type = common.OrderBookFeed
+		depth := &feed.Message.(*DepthFeed).Depth
+		c.book.handleDepth(depth)
+		feed.Message = c.book
+	}
+}
+
 func (c *Client) async() {
 	feed := &Feed{}
 
@@ -81,6 +92,7 @@ func (c *Client) async() {
 			panic(err.Error())
 		}
 
+		c.convertDepthToBookFeed(feed)
 		c.feeds <- feed
 	}
 }

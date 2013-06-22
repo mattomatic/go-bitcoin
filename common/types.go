@@ -55,6 +55,7 @@ type Client interface {
 
 type Order interface {
 	GetExchange() Exchange
+	GetSymbol() Symbol
 	GetVolume() Volume
 	GetPrice() Price
 }
