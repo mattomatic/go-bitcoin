@@ -38,17 +38,35 @@ func (c *Client) Channel() <-chan common.Feed {
 func (c *Client) async() {
 	for {
 		time.Sleep(SleepInterval)
+
 		if c.tickerFeeds {
 			c.pullTickerFeed()
+		}
+		if c.orderBookFeeds {
+			c.pullOrderBookFeed()
 		}
 	}
 }
 
 func (c *Client) pullTickerFeed() {
 	ticker := GetTicker()
+
 	feed := &Feed{
 		common.TickerFeed,
 		ticker.GetTimestamp(),
 		ticker}
+
 	c.feeds <- feed
+}
+
+func (c *Client) pullOrderBookFeed() {
+	book := GetOrderBook()
+
+	feed := &Feed{
+		common.OrderBookFeed,
+		book.GetTimestamp(),
+		book}
+
+	c.feeds <- feed
+
 }

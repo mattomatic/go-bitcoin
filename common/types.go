@@ -14,7 +14,7 @@ type FeedType int
 
 const (
 	TickerFeed FeedType = iota
-	DepthFeed
+	OrderBookFeed
 	TradeFeed
 )
 

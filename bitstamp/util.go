@@ -3,6 +3,7 @@ package bitstamp
 import (
 	"github.com/mattomatic/go-bitcoin/common"
 	"strconv"
+	"time"
 )
 
 func getPrice(price string) common.Price {
@@ -11,6 +12,10 @@ func getPrice(price string) common.Price {
 
 func getVolume(volume string) common.Volume {
 	return common.Volume(getFloat(volume))
+}
+
+func getTimestamp(amount string) time.Time {
+	return time.Unix(int64(getInt(amount)), 0)
 }
 
 func getInt(amount string) int {
