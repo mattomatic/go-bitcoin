@@ -5,34 +5,55 @@ import (
 	"time"
 )
 
-func (t *Ticker) Exchange() common.Exchange {
+type TickerField struct {
+	Currency string `json:"currency"`
+	Display  string `json:"display"`
+	Value    string `json:"value"`
+	ValueInt string `json:"value_int"`
+}
+
+type Ticker struct {
+	Average      TickerField `json:"avg"`
+	Bid          TickerField `json:"buy"`
+	Ask          TickerField `json:"sell"`
+	Last         TickerField `json:"last"`
+	LastLocal    TickerField `json:"last_local"`
+	LastOriginal TickerField `json:"last_orig"`
+	High         TickerField `json:"high"`
+	Low          TickerField `json:"low"`
+	Volume       TickerField `json:"vol"`
+	Vwap         TickerField `json:"vwap"`
+	Timestamp    time.Time
+}
+
+func (t *Ticker) GetExchange() common.Exchange {
 	return common.Exchange(ExchangeId)
 }
 
-func (t *Ticker) Symbol() common.Symbol {
+func (t *Ticker) GetSymbol() common.Symbol {
 	return common.Symbol("BTC")
 }
 
-func (t *Ticker) Timestamp() time.Time {
-	return t.timestamp
+func (t *Ticker) GetTimestamp() time.Time {
+	return t.Timestamp
 }
 
-func (t *Ticker) Bid() common.Price {
-	return getPrice(t.bid.valueInt)
+func (t *Ticker) GetBid() common.Price {
+	return getPrice(t.Bid.ValueInt)
 }
 
-func (t *Ticker) Ask() common.Price {
-	return getPrice(t.ask.valueInt)
+func (t *Ticker) GetAsk() common.Price {
+	return getPrice(t.Ask.ValueInt)
 }
 
-func (t *Ticker) High() common.Price {
-	return getPrice(t.high.valueInt)
+func (t *Ticker) GetHigh() common.Price {
+	return getPrice(t.High.ValueInt)
 }
 
-func (t *Ticker) Low() common.Price {
-	return getPrice(t.low.valueInt)
+func (t *Ticker) GetLow() common.Price {
+	return getPrice(t.Low.ValueInt)
 }
 
-func (t *Ticker) Volume() common.Volume {
-	return getVolume(t.volume.valueInt)
+func (t *Ticker) GetVolume() common.Volume {
+	return getVolume(t.Volume.ValueInt)
 }

@@ -12,14 +12,19 @@ const (
 type Client struct {
 	feeds       chan *common.Feed
 	tickerFeeds bool
+	orderBookFeeds   bool
 }
 
 func NewClient() *Client {
-	return &Client{make(chan *common.Feed), false}
+	return &Client{make(chan *common.Feed), false, false}
 }
 
 func (c *Client) ToggleTickerFeeds() {
 	c.tickerFeeds = !c.tickerFeeds
+}
+
+func (c *Client) ToggleOrderBookFeeds() {
+    c.orderBookFeeds = !c.orderBookFeeds
 }
 
 func (c *Client) ToggleAsync() {

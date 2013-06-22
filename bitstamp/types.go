@@ -13,3 +13,9 @@ type Ticker struct {
 	Last      string `json:"last"`
 	Volume    string `json:"volume"`
 }
+
+type OrderBook struct {
+	Timestamp string  `json:"timestamp"`
+	Bids      []Order `json:"bids"`
+	Asks      []Order `json:"asks"`
+}

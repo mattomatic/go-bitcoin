@@ -10,7 +10,6 @@ type Exchange string
 type Currency string
 type Symbol string
 type TradeId string
-
 type FeedType int
 
 const (
@@ -40,7 +39,7 @@ type Ticker interface {
 	GetVolume() Volume
 }
 
-type Feed struct {
+type Feed struct { // todo: make this an interface
 	Type      FeedType
 	Timestamp time.Time
 	Message   interface{}
@@ -48,6 +47,13 @@ type Feed struct {
 
 type Client interface {
 	ToggleTickerFeeds()
+	ToggleOrderBookFeeds()
 	ToggleAsync()
 	Channel() <-chan *Feed
+}
+
+type Order interface {
+    GetExchange() Exchange
+    GetVolume() Volume
+    GetPrice() Price
 }

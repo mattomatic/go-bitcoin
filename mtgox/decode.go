@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
+func (feed *Feed) UnmarshalJSON(bytes []byte) error {
 	feed.Timestamp = time.Now()
 
 	header := &Header{}
-	err = json.Unmarshal(bytes, header)
+	err := json.Unmarshal(bytes, header)
 
 	if err != nil {
 		panic(err.Error())
@@ -25,7 +25,7 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
 		feed.Message = msg
 	case common.TickerFeed:
 		msg := &TickerFeed{}
-		msg.timestamp = feed.Timestamp
+		msg.Timestamp = feed.Timestamp
 		err = json.Unmarshal(bytes, msg)
 		feed.Message = msg
 	case common.TradeFeed:
@@ -34,6 +34,10 @@ func (feed *Feed) UnmarshalJSON(bytes []byte) (err error) {
 		feed.Message = msg
 	default:
 		panic("unrecognized feed type!")
+	}
+	
+	if err != nil {
+		panic(err.Error())
 	}
 
 	return err
