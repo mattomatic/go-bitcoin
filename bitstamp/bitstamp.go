@@ -6,6 +6,10 @@ import (
 )
 
 const (
+	ExchangeId = "BITSTAMP"
+)
+
+const (
 	TickerUrl    = "https://bitstamp.net/api/ticker"
 	OrderBookUrl = "https://www.bitstamp.net/api/order_book/"
 )
