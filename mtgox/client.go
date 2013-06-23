@@ -42,7 +42,7 @@ func NewClient() *Client {
 	}
 
     // Go async now
-    go c.async()
+    go client.async()
 
 	return client
 }

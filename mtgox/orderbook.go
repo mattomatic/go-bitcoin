@@ -21,6 +21,7 @@ func (o *OrderBook) GetBids() chan common.Order {
 
 	iterator := func(item llrb.Item) bool {
 		orders <- item.(*Order)
+		return true
 	}
 
 	go func() {
@@ -36,11 +37,12 @@ func (o *OrderBook) GetAsks() chan common.Order {
 
 	iterator := func(item llrb.Item) bool {
 		orders <- item.(*Order)
+		return true
 	}
 
 	go func() {
 		defer close(orders)
-		o.Asks.AscendGreaterOrEqual(o.Asks.Min(), adder)
+		o.Asks.AscendGreaterOrEqual(o.Asks.Min(), iterator)
 	}()
 
 	return orders
