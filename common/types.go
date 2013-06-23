@@ -35,9 +35,6 @@ type Ticker interface {
 	GetTimestamp() time.Time
 	GetBid() Price
 	GetAsk() Price
-	GetHigh() Price
-	GetLow() Price
-	GetVolume() Volume
 }
 
 type Feed interface {
@@ -49,7 +46,6 @@ type Feed interface {
 type Client interface {
 	ToggleTickerFeeds()
 	ToggleOrderBookFeeds()
-	ToggleAsync()
 	Channel() <-chan Feed
 }
 

@@ -16,7 +16,9 @@ type Client struct {
 }
 
 func NewClient() *Client {
-	return &Client{make(chan common.Feed), false, false}
+    c := &Client{make(chan common.Feed), false, false}
+    go c.async()
+	return c
 }
 
 func (c *Client) ToggleTickerFeeds() {
@@ -25,10 +27,6 @@ func (c *Client) ToggleTickerFeeds() {
 
 func (c *Client) ToggleOrderBookFeeds() {
 	c.orderBookFeeds = !c.orderBookFeeds
-}
-
-func (c *Client) ToggleAsync() {
-	go c.async()
 }
 
 func (c *Client) Channel() <-chan common.Feed {

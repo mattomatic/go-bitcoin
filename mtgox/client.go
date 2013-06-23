@@ -41,6 +41,9 @@ func NewClient() *Client {
 		panic(err.Error())
 	}
 
+    // Go async now
+    go c.async()
+
 	return client
 }
 
@@ -58,10 +61,6 @@ func (c *Client) ToggleTradeFeeds() {
 
 func (c *Client) ToggleOrderBookFeeds() {
 	c.toggle("depth")
-}
-
-func (c *Client) ToggleAsync() {
-	go c.async()
 }
 
 func (c *Client) toggle(feed string) {

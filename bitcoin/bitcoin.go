@@ -20,7 +20,6 @@ func print(book common.OrderBook) {
 func main() {
 	client := bitstamp.NewClient()
 	client.ToggleOrderBookFeeds()
-	client.ToggleAsync()
 	feeds := client.Channel()
 
 	for {
