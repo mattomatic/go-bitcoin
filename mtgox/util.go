@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	Divisor = 1.0e5
+	Divisor = 1.0e5 // mtgox display divisor
 )
 
 func getPrice(price string) common.Price {
