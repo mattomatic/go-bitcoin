@@ -13,6 +13,10 @@ func (o *Order) GetExchange() common.Exchange {
 	return common.Exchange(ExchangeId)
 }
 
+func (o *Order) GetSymbol() common.Symbol {
+	return common.Symbol("BTC")
+}
+
 func (o *Order) GetPrice() common.Price {
 	return getPrice(o.Price)
 }

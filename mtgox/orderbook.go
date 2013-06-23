@@ -16,12 +16,34 @@ func newOrderBook() *OrderBook {
 		llrb.New()}
 }
 
-func (o *OrderBook) GetBids() []common.Order {
-	return make([]common.Order, 0)
+func (o *OrderBook) GetBids() chan common.Order {
+	orders := make(chan common.Order)
+
+	iterator := func(item llrb.Item) bool {
+		orders <- item.(*Order)
+	}
+
+	go func() {
+		defer close(orders)
+		o.Bids.DescendLessOrEqual(o.Bids.Max(), iterator)
+	}()
+
+	return orders
 }
 
-func (o *OrderBook) GetAsks() []common.Order {
-	return make([]common.Order, 0)
+func (o *OrderBook) GetAsks() chan common.Order {
+	orders := make(chan common.Order)
+
+	iterator := func(item llrb.Item) bool {
+		orders <- item.(*Order)
+	}
+
+	go func() {
+		defer close(orders)
+		o.Asks.AscendGreaterOrEqual(o.Asks.Min(), adder)
+	}()
+
+	return orders
 }
 
 func (o *OrderBook) handleDepth(depth *Depth) {

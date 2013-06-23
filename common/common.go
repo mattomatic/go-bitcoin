@@ -13,7 +13,3 @@ func TickerString(t Ticker) string {
 func OrderString(o Order) string {
 	return fmt.Sprintf("%s:%s %f @ %f", o.GetExchange(), o.GetSymbol(), o.GetVolume(), o.GetPrice())
 }
-
-func OrderBookString(o OrderBook) string {
-	return fmt.Sprintf("bids: %s asks %s", o.GetBids(), o.GetAsks())
-}

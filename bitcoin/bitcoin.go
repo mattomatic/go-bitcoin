@@ -2,32 +2,33 @@ package main
 
 import (
 	"fmt"
+	"github.com/mattomatic/go-bitcoin/bitstamp"
 	"github.com/mattomatic/go-bitcoin/common"
-	"github.com/mattomatic/go-bitcoin/mtgox"
 )
 
+func print(book common.OrderBook) {
+	for bid := range book.GetBids() {
+		fmt.Println("bid", common.OrderString(bid))
+	}
+
+	for ask := range book.GetAsks() {
+		fmt.Println("ask", common.OrderString(ask))
+	}
+
+}
+
 func main() {
-	var gx common.Client = mtgox.NewClient()
-	gx.ToggleOrderBookFeeds()
-	gx.ToggleTickerFeeds()
-	gx.ToggleAsync()
-	gxchan := gx.Channel()
+	client := bitstamp.NewClient()
+	client.ToggleOrderBookFeeds()
+	client.ToggleAsync()
+	feeds := client.Channel()
 
 	for {
 		select {
-		case gxfeed := <-gxchan:
-			if gxfeed.GetType() == common.TickerFeed {
-				fmt.Println("ticker", common.TickerString(gxfeed.GetMessage().(common.Ticker)))
-			}
-			if gxfeed.GetType() == common.OrderBookFeed {
-				book := gxfeed.GetMessage().(common.OrderBook)
-				for _, bid := range book.GetBids() {
-					fmt.Println("bid", common.OrderString(bid))
-				}
-
-				for _, ask := range book.GetAsks() {
-					fmt.Println("ask", common.OrderString(ask))
-				}
+		case feed := <-feeds:
+			if feed.GetType() == common.OrderBookFeed {
+				book := feed.GetMessage().(common.OrderBook)
+				print(book)
 			}
 
 			fmt.Println("----------------------")

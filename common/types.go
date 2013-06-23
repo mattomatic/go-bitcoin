@@ -61,6 +61,6 @@ type Order interface {
 }
 
 type OrderBook interface {
-	GetBids() []Order
-	GetAsks() []Order
+	GetBids() <-chan Order
+	GetAsks() <-chan Order
 }
