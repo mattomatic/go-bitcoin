@@ -32,21 +32,8 @@ type Trade interface {
 type Ticker interface {
 	GetExchange() Exchange
 	GetSymbol() Symbol
-	GetTimestamp() time.Time
 	GetBid() Price
 	GetAsk() Price
-}
-
-type Feed interface {
-	GetType() FeedType
-	GetTimestamp() time.Time
-	GetMessage() interface{}
-}
-
-type Client interface {
-	ToggleTickerFeeds()
-	ToggleOrderBookFeeds()
-	Channel() <-chan Feed
 }
 
 type Order interface {

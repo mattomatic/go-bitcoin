@@ -16,7 +16,7 @@ func newOrderBook() *OrderBook {
 		llrb.New()}
 }
 
-func (o *OrderBook) GetBids() chan common.Order {
+func (o *OrderBook) GetBids() <-chan common.Order {
 	orders := make(chan common.Order)
 
 	iterator := func(item llrb.Item) bool {
@@ -32,7 +32,7 @@ func (o *OrderBook) GetBids() chan common.Order {
 	return orders
 }
 
-func (o *OrderBook) GetAsks() chan common.Order {
+func (o *OrderBook) GetAsks() <-chan common.Order {
 	orders := make(chan common.Order)
 
 	iterator := func(item llrb.Item) bool {

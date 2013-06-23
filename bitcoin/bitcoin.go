@@ -18,19 +18,10 @@ func print(book common.OrderBook) {
 }
 
 func main() {
-	client := bitstamp.NewClient()
-	client.ToggleOrderBookFeeds()
-	feeds := client.Channel()
+	books := bitstamp.GetOrderBookChannel()
 
-	for {
-		select {
-		case feed := <-feeds:
-			if feed.GetType() == common.OrderBookFeed {
-				book := feed.GetMessage().(common.OrderBook)
-				print(book)
-			}
-
-			fmt.Println("----------------------")
-		}
+	for book := range books {
+		print(book)
+		fmt.Println("----------")
 	}
 }

@@ -2,7 +2,6 @@ package mtgox
 
 import (
 	"github.com/mattomatic/go-bitcoin/common"
-	"time"
 )
 
 type TickerField struct {
@@ -23,7 +22,6 @@ type Ticker struct {
 	Low          TickerField `json:"low"`
 	Volume       TickerField `json:"vol"`
 	Vwap         TickerField `json:"vwap"`
-	Timestamp    time.Time
 }
 
 func (t *Ticker) GetExchange() common.Exchange {
@@ -32,10 +30,6 @@ func (t *Ticker) GetExchange() common.Exchange {
 
 func (t *Ticker) GetSymbol() common.Symbol {
 	return common.Symbol("BTC")
-}
-
-func (t *Ticker) GetTimestamp() time.Time {
-	return t.Timestamp
 }
 
 func (t *Ticker) GetBid() common.Price {
