@@ -1,4 +1,4 @@
-package bitstamp
+package btce
 
 import (
 	"github.com/mattomatic/go-bitcoin/common"
@@ -6,24 +6,10 @@ import (
 )
 
 const (
-	ExchangeId   = "BITSTAMP"
-	TickerUrl    = "https://bitstamp.net/api/ticker"
-	OrderBookUrl = "https://www.bitstamp.net/api/order_book"
-	PollInterval = time.Second
+	ExchangeId   = "BTCE"
+	OrderBookUrl = "https://btc-e.com/api/2/btc_usd/depth"
+	PollInterval = time.Millisecond * 500
 )
-
-func GetTickerChannel() <-chan *Ticker {
-	ch := make(chan *Ticker)
-
-	go func() {
-		for {
-			time.Sleep(PollInterval)
-			ch <- getTicker()
-		}
-	}()
-
-	return ch
-}
 
 func GetOrderBookChannel() <-chan *OrderBook {
 	ch := make(chan *OrderBook)

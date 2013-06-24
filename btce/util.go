@@ -1,4 +1,4 @@
-package bitstamp
+package btce
 
 import (
 	"encoding/json"
@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func getPrice(price string) common.Price {
@@ -15,20 +14,6 @@ func getPrice(price string) common.Price {
 
 func getVolume(volume string) common.Volume {
 	return common.Volume(getFloat(volume))
-}
-
-func getTimestamp(amount string) time.Time {
-	return time.Unix(int64(getInt(amount)), 0)
-}
-
-func getInt(amount string) int {
-	x, err := strconv.Atoi(amount)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return x
 }
 
 func getFloat(amount string) float64 {
@@ -55,19 +40,6 @@ func httpRequest(url string) []byte {
 	}
 
 	return body
-}
-
-func getTicker() *Ticker {
-	bytes := httpRequest(TickerUrl)
-	ticker := &Ticker{}
-
-	err := json.Unmarshal(bytes, ticker)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return ticker
 }
 
 func getOrderBook() *OrderBook {
