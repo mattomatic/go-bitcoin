@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/mattomatic/go-bitcoin/campbx"
 	"github.com/mattomatic/go-bitcoin/common"
+	"time"
 )
 
 func print(book common.OrderBook) {
@@ -18,10 +19,8 @@ func print(book common.OrderBook) {
 }
 
 func main() {
-	books := campbx.GetOrderBookChannel()
-
-	for book := range books {
-		print(book)
-		fmt.Println("----------")
+	for diff := range campbx.GetDepthDiffChannel() {
+		fmt.Println(diff.GetSide(), diff)
+		fmt.Println("----------------", time.Now().Second)
 	}
 }

@@ -11,12 +11,16 @@ type (
 	Currency string
 	Symbol   string
 	TradeId  string
-	Side     int
+	Side     string
 )
 
 const (
-	Bid Side = iota
-	Ask
+	Bid Side = "Bid"
+	Ask Side = "Ask"
+)
+
+const (
+    USD Currency = "USD"
 )
 
 type Trade interface {

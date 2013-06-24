@@ -15,7 +15,7 @@ func (d *diff) GetPrice() Price       { return d.price }
 func (d *diff) GetSide() Side         { return d.side }
 
 // Generate a list of changes that occurred between the old book and the new book.
-func GenerateDiff(old, new OrderBook) <-chan DepthDiff {
+func GenerateDiffs(old, new OrderBook) <-chan DepthDiff {
 	diffs := make(chan DepthDiff)
 	go generate(diffs, old, new)
 	return diffs
@@ -91,5 +91,6 @@ func makeDiff(order Order, side Side) *diff {
 		symbol:   order.GetSymbol(),
 		volume:   order.GetVolume(),
 		price:    order.GetPrice(),
+		side:     side,
 	}
 }

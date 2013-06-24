@@ -2,6 +2,7 @@ package campbx
 
 import (
 	"encoding/json"
+	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
 
@@ -17,6 +18,7 @@ func GetTickerChannel() <-chan *Ticker {
 	ticker := &Ticker{}
 
 	go func() {
+		defer close(ch)
 		for {
 			time.Sleep(PollInterval)
 
@@ -39,6 +41,7 @@ func GetOrderBookChannel() <-chan *OrderBook {
 	book := &OrderBook{}
 
 	go func() {
+		defer close(ch)
 		for {
 			time.Sleep(PollInterval)
 
@@ -50,6 +53,24 @@ func GetOrderBookChannel() <-chan *OrderBook {
 			}
 
 			ch <- book
+		}
+	}()
+
+	return ch
+}
+
+func GetDepthDiffChannel() <-chan common.DepthDiff {
+	ch := make(chan common.DepthDiff)
+	books := GetOrderBookChannel()
+
+	go func() {
+		defer close(ch)
+		old := <-books
+
+		for new := range books {
+			for diff := range common.GenerateDiffs(old, new) {
+				ch <- diff
+			}
 		}
 	}()
 
