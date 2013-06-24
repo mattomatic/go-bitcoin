@@ -1,6 +1,7 @@
 package bitstamp
 
 import (
+	"github.com/mattomatic/go-bitcoin/algo"
 	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
@@ -47,7 +48,7 @@ func GetDepthDiffChannel() <-chan common.DepthDiff {
 		old := newOrderBook() // start with an empty book
 
 		for new := range books {
-			for diff := range common.GenerateDiffs(old, new) {
+			for diff := range algo.GenerateDiffs(old, new) {
 				ch <- diff
 			}
 

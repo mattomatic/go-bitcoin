@@ -1,34 +1,38 @@
-package common
+package algo
+
+import (
+	"github.com/mattomatic/go-bitcoin/common"
+)
 
 type diff struct {
-	exchange Exchange
-	symbol   Symbol
-	volume   Volume
-	price    Price
-	side     Side
+	exchange common.Exchange
+	symbol   common.Symbol
+	volume   common.Volume
+	price    common.Price
+	side     common.Side
 }
 
-func (d *diff) GetExchange() Exchange { return d.exchange }
-func (d *diff) GetSymbol() Symbol     { return d.symbol }
-func (d *diff) GetVolume() Volume     { return d.volume }
-func (d *diff) GetPrice() Price       { return d.price }
-func (d *diff) GetSide() Side         { return d.side }
+func (d *diff) GetExchange() common.Exchange { return d.exchange }
+func (d *diff) GetSymbol() common.Symbol     { return d.symbol }
+func (d *diff) GetVolume() common.Volume     { return d.volume }
+func (d *diff) GetPrice() common.Price       { return d.price }
+func (d *diff) GetSide() common.Side         { return d.side }
 
 // Generate a list of changes that occurred between the old book and the new book.
-func GenerateDiffs(old, new OrderBook) <-chan DepthDiff {
-	diffs := make(chan DepthDiff)
+func GenerateDiffs(old, new common.OrderBook) <-chan common.DepthDiff {
+	diffs := make(chan common.DepthDiff)
 	go generate(diffs, old, new)
 	return diffs
 }
 
-func generate(diffs chan DepthDiff, oldBook, newBook OrderBook) {
+func generate(diffs chan common.DepthDiff, oldBook, newBook common.OrderBook) {
 	defer close(diffs)
-	walk(diffs, Bid, oldBook.GetBids(), newBook.GetBids())
-	walk(diffs, Ask, oldBook.GetAsks(), newBook.GetAsks())
+	walk(diffs, common.Bid, oldBook.GetBids(), newBook.GetBids())
+	walk(diffs, common.Ask, oldBook.GetAsks(), newBook.GetAsks())
 }
 
 // walk down the book depth generating insert/delete/modify diffs
-func walk(diffs chan DepthDiff, side Side, oldOrders, newOrders <-chan Order) {
+func walk(diffs chan common.DepthDiff, side common.Side, oldOrders, newOrders <-chan common.Order) {
 	old, oldOk := <-oldOrders
 	new, newOk := <-newOrders
 
@@ -60,37 +64,37 @@ func walk(diffs chan DepthDiff, side Side, oldOrders, newOrders <-chan Order) {
 	}
 }
 
-func shouldInsertNew(side Side, old, new Order) bool {
-	if side == Bid {
+func shouldInsertNew(side common.Side, old, new common.Order) bool {
+	if side == common.Bid {
 		return new.GetPrice() > old.GetPrice()
 	} else {
 		return new.GetPrice() < old.GetPrice()
 	}
 }
 
-func shouldRemoveOld(side Side, old, new Order) bool {
-	if side == Bid {
+func shouldRemoveOld(side common.Side, old, new common.Order) bool {
+	if side == common.Bid {
 		return old.GetPrice() > new.GetPrice()
 	} else {
 		return old.GetPrice() < new.GetPrice()
 	}
 }
 
-func remove(order Order, side Side) *diff {
+func remove(order common.Order, side common.Side) *diff {
 	diff := makeDiff(order, side)
 	diff.volume = 0
 	return diff
 }
 
-func insert(order Order, side Side) *diff {
+func insert(order common.Order, side common.Side) *diff {
 	return makeDiff(order, side)
 }
 
-func update(order Order, side Side) *diff {
+func update(order common.Order, side common.Side) *diff {
 	return makeDiff(order, side)
 }
 
-func makeDiff(order Order, side Side) *diff {
+func makeDiff(order common.Order, side common.Side) *diff {
 	return &diff{
 		exchange: order.GetExchange(),
 		symbol:   order.GetSymbol(),

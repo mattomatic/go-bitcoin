@@ -41,16 +41,16 @@ func getDepthDiffChannel() <-chan *Depth {
 	return ch
 }
 
-func GetOrderBookChannel() <-chan *OrderBook {
+func GetOrderBookChannel() <-chan common.OrderBook {
 	depths := getDepthDiffChannel()
-	book := newOrderBook()
-	ch := make(chan *OrderBook)
+	book := common.NewBook()
+	ch := make(chan common.OrderBook)
 
 	go func() {
 		defer close(ch)
 		for {
 			depth := <-depths
-			book.handleDepth(depth)
+			book.ApplyDiff(depth)
 			ch <- book
 		}
 	}()

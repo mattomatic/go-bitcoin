@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/mattomatic/go-bitcoin/algo"
 	"github.com/mattomatic/go-bitcoin/bitstamp"
 	"github.com/mattomatic/go-bitcoin/btce"
 	"github.com/mattomatic/go-bitcoin/common"
@@ -45,6 +46,6 @@ func main() {
 	for diff := range diffs {
 		book.ApplyDiff(diff)
 		printBook(book, 20)
-		fmt.Println(time.Now(), "---------------->", common.DepthDiffString(diff))
+		fmt.Println(time.Now(), "---------------->", algo.Uncross(book))
 	}
 }
