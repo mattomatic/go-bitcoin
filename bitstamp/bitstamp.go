@@ -6,16 +6,10 @@ import (
 )
 
 const (
-	ExchangeId = "BITSTAMP"
-)
-
-const (
+	ExchangeId   = "BITSTAMP"
 	TickerUrl    = "https://bitstamp.net/api/ticker"
 	OrderBookUrl = "https://www.bitstamp.net/api/order_book/"
-)
-
-const (
-	SleepInterval = time.Second
+	PollInterval = time.Second
 )
 
 func GetTickerChannel() <-chan *Ticker {
@@ -23,7 +17,7 @@ func GetTickerChannel() <-chan *Ticker {
 
 	go func() {
 		for {
-			time.Sleep(SleepInterval)
+			time.Sleep(PollInterval)
 			ch <- getTicker()
 		}
 	}()
@@ -36,7 +30,7 @@ func GetOrderBookChannel() <-chan *OrderBook {
 
 	go func() {
 		for {
-			time.Sleep(SleepInterval)
+			time.Sleep(PollInterval)
 			ch <- getOrderBook()
 		}
 	}()

@@ -13,10 +13,5 @@ type Depth struct {
 	Type        string `json:"type_str"`
 }
 
-func (d *Depth) GetVolume() common.Volume {
-	return getVolume(d.TotalVolume)
-}
-
-func (d *Depth) GetPrice() common.Price {
-	return getPrice(d.Price)
-}
+func (d *Depth) GetVolume() common.Volume { return getVolume(d.TotalVolume) }
+func (d *Depth) GetPrice() common.Price   { return getPrice(d.Price) }

@@ -24,30 +24,10 @@ type Ticker struct {
 	Vwap         TickerField `json:"vwap"`
 }
 
-func (t *Ticker) GetExchange() common.Exchange {
-	return common.Exchange(ExchangeId)
-}
-
-func (t *Ticker) GetSymbol() common.Symbol {
-	return common.Symbol("BTC")
-}
-
-func (t *Ticker) GetBid() common.Price {
-	return getPrice(t.Bid.ValueInt)
-}
-
-func (t *Ticker) GetAsk() common.Price {
-	return getPrice(t.Ask.ValueInt)
-}
-
-func (t *Ticker) GetHigh() common.Price {
-	return getPrice(t.High.ValueInt)
-}
-
-func (t *Ticker) GetLow() common.Price {
-	return getPrice(t.Low.ValueInt)
-}
-
-func (t *Ticker) GetVolume() common.Volume {
-	return getVolume(t.Volume.ValueInt)
-}
+func (t *Ticker) GetExchange() common.Exchange { return common.Exchange(ExchangeId) }
+func (t *Ticker) GetSymbol() common.Symbol     { return common.Symbol("BTC") }
+func (t *Ticker) GetBid() common.Price         { return getPrice(t.Bid.ValueInt) }
+func (t *Ticker) GetAsk() common.Price         { return getPrice(t.Ask.ValueInt) }
+func (t *Ticker) GetHigh() common.Price        { return getPrice(t.High.ValueInt) }
+func (t *Ticker) GetLow() common.Price         { return getPrice(t.Low.ValueInt) }
+func (t *Ticker) GetVolume() common.Volume     { return getVolume(t.Volume.ValueInt) }

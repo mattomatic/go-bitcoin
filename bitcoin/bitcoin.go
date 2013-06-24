@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/mattomatic/go-bitcoin/bitstamp"
+	"github.com/mattomatic/go-bitcoin/campbx"
 	"github.com/mattomatic/go-bitcoin/common"
 )
 
@@ -18,7 +18,7 @@ func print(book common.OrderBook) {
 }
 
 func main() {
-	books := bitstamp.GetOrderBookChannel()
+	books := campbx.GetOrderBookChannel()
 
 	for book := range books {
 		print(book)

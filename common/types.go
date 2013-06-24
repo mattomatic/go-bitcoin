@@ -4,19 +4,19 @@ import (
 	"time"
 )
 
-type Volume float64
-type Price float64
-type Exchange string
-type Currency string
-type Symbol string
-type TradeId string
-type FeedType int
+type (
+	Volume   float64
+	Price    float64
+	Exchange string
+	Currency string
+	Symbol   string
+	TradeId  string
+	Side     int
+)
 
 const (
-	TickerFeed FeedType = iota
-	OrderBookFeed
-	TradeFeed
-	DepthFeed
+	Bid Side = iota
+	Ask
 )
 
 type Trade interface {
@@ -46,4 +46,12 @@ type Order interface {
 type OrderBook interface {
 	GetBids() <-chan Order
 	GetAsks() <-chan Order
+}
+
+type DepthDiff interface {
+	GetExchange() Exchange
+	GetSymbol() Symbol
+	GetVolume() Volume
+	GetPrice() Price
+	GetSide() Side
 }
