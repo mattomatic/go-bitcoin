@@ -2,7 +2,6 @@ package campbx
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
@@ -45,7 +44,6 @@ func GetOrderBookChannel() <-chan *OrderBook {
 		defer close(ch)
 
 		for {
-			fmt.Println("polling")
 			time.Sleep(PollInterval)
 
 			bytes := httpRequest(OrderBookUrl)

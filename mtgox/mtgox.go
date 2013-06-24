@@ -1,10 +1,29 @@
 package mtgox
 
+import (
+	"github.com/mattomatic/go-bitcoin/common"
+)
+
 const (
 	ExchangeId = "MTGOX"
 )
 
-func GetDepthDiffChannel() <-chan *Depth {
+func GetDepthDiffChannel() <-chan common.DepthDiff {
+	// channels are invariant so we have to wrap this
+	depthdiffs := make(chan common.DepthDiff)
+	diffs := getDepthDiffChannel()
+
+	go func() {
+		defer close(depthdiffs)
+		for diff := range diffs {
+			depthdiffs <- diff
+		}
+	}()
+
+	return depthdiffs
+}
+
+func getDepthDiffChannel() <-chan *Depth {
 	connection := connect()
 	connection.subscribe("depth")
 	feeds := connection.poll()
@@ -23,7 +42,7 @@ func GetDepthDiffChannel() <-chan *Depth {
 }
 
 func GetOrderBookChannel() <-chan *OrderBook {
-	depths := GetDepthDiffChannel()
+	depths := getDepthDiffChannel()
 	book := newOrderBook()
 	ch := make(chan *OrderBook)
 
