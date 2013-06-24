@@ -70,5 +70,5 @@ func update(tree *llrb.LLRB, order *Order) {
 }
 
 func makeOrder(depth *Depth) *Order {
-	return &Order{price: depth.Price, volume: depth.TotalVolume}
+	return &Order{price: getPrice(depth.Price), volume: getVolume(depth.TotalVolume)}
 }
