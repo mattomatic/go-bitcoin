@@ -33,41 +33,46 @@ func walk(diffs chan DepthDiff, side Side, oldOrders, newOrders <-chan Order) {
 	new, newOk := <-newOrders
 
 	for oldOk && newOk {
-		if shouldInsert(side, old, new) {
+		if shouldInsertNew(side, old, new) {
 			diffs <- insert(new, side)
 			new, newOk = <-newOrders
-		} else if shouldRemove(side, old, new) {
+		} else if shouldRemoveOld(side, old, new) {
 			diffs <- remove(old, Bid)
-			new, newOk = <-oldOrders
+			old, oldOk = <-oldOrders
 		} else {
-			diffs <- insert(old, Bid)
+			if old.GetVolume() != new.GetVolume() {
+				diffs <- insert(old, Bid)
+			}
+
 			new, newOk = <-newOrders
 			old, oldOk = <-oldOrders
 		}
 	}
 
 	for oldOk { // remove trailing oldies
+		diffs <- remove(old, side)
 		old, oldOk = <-oldOrders
 	}
 
 	for newOk { // insert trailing newbies
+		diffs <- insert(new, side)
 		new, newOk = <-newOrders
 	}
 }
 
-func shouldInsert(side Side, old, new Order) bool {
+func shouldInsertNew(side Side, old, new Order) bool {
 	if side == Bid {
-		return new.GetPrice() < old.GetPrice()
-	} else {
 		return new.GetPrice() > old.GetPrice()
+	} else {
+		return new.GetPrice() < old.GetPrice()
 	}
 }
 
-func shouldRemove(side Side, old, new Order) bool {
+func shouldRemoveOld(side Side, old, new Order) bool {
 	if side == Bid {
-		return new.GetPrice() > old.GetPrice()
+		return old.GetPrice() > new.GetPrice()
 	} else {
-		return new.GetPrice() < old.GetPrice()
+		return old.GetPrice() < new.GetPrice()
 	}
 }
 
@@ -82,7 +87,7 @@ func insert(order Order, side Side) *diff {
 }
 
 func update(order Order, side Side) *diff {
-	return insert(order, side)
+	return makeDiff(order, side)
 }
 
 func makeDiff(order Order, side Side) *diff {

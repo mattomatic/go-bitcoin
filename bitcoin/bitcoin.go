@@ -2,25 +2,25 @@ package main
 
 import (
 	"fmt"
+	"github.com/mattomatic/go-bitcoin/bitstamp"
 	"github.com/mattomatic/go-bitcoin/campbx"
 	"github.com/mattomatic/go-bitcoin/common"
-	"time"
+	"github.com/mattomatic/go-bitcoin/mtgox"
 )
 
-func print(book common.OrderBook) {
-	for bid := range book.GetBids() {
-		fmt.Println("bid", common.OrderString(bid))
-	}
-
-	for ask := range book.GetAsks() {
-		fmt.Println("ask", common.OrderString(ask))
-	}
-
-}
-
 func main() {
-	for diff := range campbx.GetDepthDiffChannel() {
-		fmt.Println(diff.GetSide(), diff)
-		fmt.Println("----------------", time.Now().Second)
+	campbxDiffs := campbx.GetDepthDiffChannel()
+	bitstampDiffs := bitstamp.GetDepthDiffChannel()
+	mtgoxDiffs := mtgox.GetDepthDiffChannel()
+
+	for {
+		select {
+		case a := <-campbxDiffs:
+			fmt.Println(common.DepthDiffString(a))
+		case b := <-bitstampDiffs:
+			fmt.Println(common.DepthDiffString(b))
+		case c := <-mtgoxDiffs:
+			fmt.Println(common.DepthDiffString(c))
+		}
 	}
 }

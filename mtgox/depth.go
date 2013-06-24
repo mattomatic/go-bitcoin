@@ -13,5 +13,19 @@ type Depth struct {
 	Type        string `json:"type_str"`
 }
 
-func (d *Depth) GetVolume() common.Volume { return getVolume(d.TotalVolume) }
-func (d *Depth) GetPrice() common.Price   { return getPrice(d.Price) }
+func (g *Depth) GetExchange() common.Exchange { return ExchangeId }
+func (g *Depth) GetSymbol() common.Symbol     { return "BTC" }
+func (d *Depth) GetVolume() common.Volume     { return getVolume(d.TotalVolume) }
+func (d *Depth) GetPrice() common.Price       { return getPrice(d.Price) }
+func (d *Depth) GetSide() common.Side         { return getSide(d.Type) }
+
+func getSide(side string) common.Side {
+	switch side {
+	case "bid":
+		return common.Bid
+	case "ask":
+		return common.Ask
+	default:
+		panic("unrecognized side")
+	}
+}

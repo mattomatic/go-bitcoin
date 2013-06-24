@@ -9,6 +9,10 @@ type OrderBook struct {
 	Asks []Order `json:"Asks"`
 }
 
+func newOrderBook() *OrderBook {
+	return &OrderBook{make([]Order, 0), make([]Order, 0)}
+}
+
 func (o *OrderBook) GetBids() <-chan common.Order {
 	return getChannelForward(o.Bids)
 }

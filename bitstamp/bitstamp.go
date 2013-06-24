@@ -2,6 +2,7 @@ package bitstamp
 
 import (
 	"encoding/json"
+	"github.com/mattomatic/go-bitcoin/common"
 	"time"
 )
 
@@ -32,6 +33,26 @@ func GetOrderBookChannel() <-chan *OrderBook {
 		for {
 			time.Sleep(PollInterval)
 			ch <- getOrderBook()
+		}
+	}()
+
+	return ch
+}
+
+func GetDepthDiffChannel() <-chan common.DepthDiff {
+	ch := make(chan common.DepthDiff)
+	books := GetOrderBookChannel()
+
+	go func() {
+		defer close(ch)
+		old := newOrderBook() // start with an empty book
+
+		for new := range books {
+			for diff := range common.GenerateDiffs(old, new) {
+				ch <- diff
+			}
+
+			old = new
 		}
 	}()
 

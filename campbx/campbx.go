@@ -42,6 +42,7 @@ func GetOrderBookChannel() <-chan *OrderBook {
 
 	go func() {
 		defer close(ch)
+
 		for {
 			time.Sleep(PollInterval)
 
@@ -65,12 +66,14 @@ func GetDepthDiffChannel() <-chan common.DepthDiff {
 
 	go func() {
 		defer close(ch)
-		old := <-books
+		old := newOrderBook()
 
 		for new := range books {
 			for diff := range common.GenerateDiffs(old, new) {
 				ch <- diff
 			}
+
+			old = new
 		}
 	}()
 

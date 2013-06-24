@@ -6,15 +6,16 @@ import (
 )
 
 const (
-	Divisor = 1.0e5 // mtgox display divisor
+	PriceDivisor  = 1.0e5 // mtgox display divisor
+	VolumeDivisor = 1.0e8 // mtgox display divisor
 )
 
 func getPrice(price string) common.Price {
-	return common.Price(getFloat(price))
+	return common.Price(getFloat(price) / PriceDivisor)
 }
 
 func getVolume(volume string) common.Volume {
-	return common.Volume(getFloat(volume))
+	return common.Volume(getFloat(volume) / VolumeDivisor)
 }
 
 func getFloat(amount string) float64 {
@@ -24,5 +25,5 @@ func getFloat(amount string) float64 {
 		panic(err.Error())
 	}
 
-	return float64(x) / Divisor
+	return float64(x)
 }

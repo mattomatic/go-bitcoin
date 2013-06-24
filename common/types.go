@@ -20,7 +20,7 @@ const (
 )
 
 const (
-    USD Currency = "USD"
+	USD Currency = "USD"
 )
 
 type Trade interface {

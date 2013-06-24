@@ -2,17 +2,15 @@ package bitstamp
 
 import (
 	"github.com/mattomatic/go-bitcoin/common"
-	"time"
 )
 
 type OrderBook struct {
-	Timestamp string  `json:"timestamp"`
-	Bids      []Order `json:"bids"`
-	Asks      []Order `json:"asks"`
+	Bids []Order `json:"bids"`
+	Asks []Order `json:"asks"`
 }
 
-func (o *OrderBook) GetTimestamp() time.Time {
-	return getTimestamp(o.Timestamp)
+func newOrderBook() *OrderBook {
+	return &OrderBook{make([]Order, 0), make([]Order, 0)}
 }
 
 func (o *OrderBook) GetBids() <-chan common.Order {
