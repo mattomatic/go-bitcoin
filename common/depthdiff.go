@@ -37,11 +37,11 @@ func walk(diffs chan DepthDiff, side Side, oldOrders, newOrders <-chan Order) {
 			diffs <- insert(new, side)
 			new, newOk = <-newOrders
 		} else if shouldRemoveOld(side, old, new) {
-			diffs <- remove(old, Bid)
+			diffs <- remove(old, side)
 			old, oldOk = <-oldOrders
 		} else {
 			if old.GetVolume() != new.GetVolume() {
-				diffs <- insert(old, Bid)
+				diffs <- insert(old, side)
 			}
 
 			new, newOk = <-newOrders

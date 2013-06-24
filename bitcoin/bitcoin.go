@@ -7,11 +7,31 @@ import (
 	"github.com/mattomatic/go-bitcoin/campbx"
 	"github.com/mattomatic/go-bitcoin/common"
 	"github.com/mattomatic/go-bitcoin/mtgox"
+	"time"
 )
 
 func multiplex(output chan<- common.DepthDiff, input <-chan common.DepthDiff) {
 	for diff := range input {
 		output <- diff
+	}
+}
+
+func printBook(book common.OrderBook, depth int) {
+	bids := book.GetBids()
+	asks := book.GetAsks()
+	bid, bidOk := <-bids
+	ask, askOk := <-asks
+
+	for depth >= 0 && bidOk && askOk {
+		fmt.Println(common.OrderString(bid), "---", common.OrderString(ask))
+		bid, bidOk = <-bids
+		ask, askOk = <-asks
+		depth--
+	}
+
+	for bidOk || askOk {
+		bid, bidOk = <-bids
+		ask, askOk = <-asks
 	}
 }
 
@@ -22,7 +42,11 @@ func main() {
 	go multiplex(diffs, campbx.GetDepthDiffChannel())
 	go multiplex(diffs, bitstamp.GetDepthDiffChannel())
 
+	book := common.NewBook()
+
 	for diff := range diffs {
-		fmt.Println(common.DepthDiffString(diff))
+		book.ApplyDiff(diff)
+		printBook(book, 20)
+		fmt.Println(time.Now(), "---------------->", common.DepthDiffString(diff))
 	}
 }
