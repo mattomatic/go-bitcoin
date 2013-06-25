@@ -2,6 +2,7 @@ package bitstamp
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/mattomatic/go-bitcoin/common"
 	"io/ioutil"
 	"net/http"
@@ -70,15 +71,20 @@ func getTicker() *Ticker {
 	return ticker
 }
 
-func getOrderBook() *OrderBook {
-	bytes := httpRequest(OrderBookUrl)
-	book := &OrderBook{}
+func getOrderBook() (book *OrderBook, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			book, err = nil, fmt.Errorf("panic: %v", r)
+		}
+	}()
 
-	err := json.Unmarshal(bytes, book)
+	bytes := httpRequest(OrderBookUrl)
+	book = &OrderBook{}
+	err = json.Unmarshal(bytes, book)
 
 	if err != nil {
 		panic(err.Error())
 	}
 
-	return book
+	return book, nil
 }

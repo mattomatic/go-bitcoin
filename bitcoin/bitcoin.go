@@ -5,6 +5,7 @@ import (
 	"github.com/mattomatic/go-bitcoin/algo"
 	"github.com/mattomatic/go-bitcoin/bitstamp"
 	"github.com/mattomatic/go-bitcoin/btce"
+	"github.com/mattomatic/go-bitcoin/campbx"
 	"github.com/mattomatic/go-bitcoin/common"
 	"github.com/mattomatic/go-bitcoin/mtgox"
 	"time"
@@ -40,6 +41,7 @@ func main() {
 	go multiplex(diffs, btce.GetDepthDiffChannel())
 	go multiplex(diffs, mtgox.GetDepthDiffChannel())
 	go multiplex(diffs, bitstamp.GetDepthDiffChannel())
+	go multiplex(diffs, campbx.GetDepthDiffChannel())
 
 	book := common.NewBook()
 

@@ -30,9 +30,24 @@ func GetOrderBookChannel() <-chan *OrderBook {
 	ch := make(chan *OrderBook)
 
 	go func() {
+		defer close(ch)
+		failed := false
+
 		for {
 			time.Sleep(PollInterval)
-			ch <- getOrderBook()
+			book, err := getOrderBook()
+
+			if failed && err != nil {
+				panic("consecutive errors!")
+			}
+
+			failed = err != nil
+
+			if failed {
+				continue
+			}
+
+			ch <- book
 		}
 	}()
 

@@ -39,19 +39,23 @@ func GetTickerChannel() <-chan *Ticker {
 
 func GetOrderBookChannel() <-chan *OrderBook {
 	ch := make(chan *OrderBook)
-	book := &OrderBook{}
 
 	go func() {
 		defer close(ch)
+		failed := false
 
 		for {
 			time.Sleep(PollInterval)
+			book, err := getOrderBook()
 
-			bytes := httpRequest(OrderBookUrl)
-			err := json.Unmarshal(bytes, book)
+			if failed && err != nil {
+				panic("consecutive errors!")
+			}
 
-			if err != nil {
-				panic(err.Error())
+			failed = err != nil
+
+			if failed {
+				continue
 			}
 
 			ch <- book
@@ -60,7 +64,6 @@ func GetOrderBookChannel() <-chan *OrderBook {
 
 	return ch
 }
-
 func GetDepthDiffChannel() <-chan common.DepthDiff {
 	ch := make(chan common.DepthDiff)
 	books := GetOrderBookChannel()
