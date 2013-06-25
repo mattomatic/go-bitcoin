@@ -40,8 +40,8 @@ func GetOrderBookChannel() <-chan *OrderBook {
 	return ch
 }
 
-func GetDepthDiffChannel() <-chan common.DepthDiff {
-	ch := make(chan common.DepthDiff)
+func GetDiffChannel() <-chan common.Diff {
+	ch := make(chan common.Diff)
 	books := GetOrderBookChannel()
 
 	go func() {

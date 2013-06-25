@@ -45,6 +45,7 @@ type Order interface {
 	GetSymbol() Symbol
 	GetVolume() Volume
 	GetPrice() Price
+	GetSide() Side
 }
 
 type OrderBook interface {
@@ -52,10 +53,4 @@ type OrderBook interface {
 	GetAsks() <-chan Order
 }
 
-type DepthDiff interface {
-	GetExchange() Exchange
-	GetSymbol() Symbol
-	GetVolume() Volume
-	GetPrice() Price
-	GetSide() Side
-}
+type Diff Order

@@ -19,20 +19,20 @@ func (d *diff) GetPrice() common.Price       { return d.price }
 func (d *diff) GetSide() common.Side         { return d.side }
 
 // Generate a list of changes that occurred between the old book and the new book.
-func GenerateDiffs(old, new common.OrderBook) <-chan common.DepthDiff {
-	diffs := make(chan common.DepthDiff)
+func GenerateDiffs(old, new common.OrderBook) <-chan common.Diff {
+	diffs := make(chan common.Diff)
 	go generate(diffs, old, new)
 	return diffs
 }
 
-func generate(diffs chan common.DepthDiff, oldBook, newBook common.OrderBook) {
+func generate(diffs chan common.Diff, oldBook, newBook common.OrderBook) {
 	defer close(diffs)
 	walk(diffs, common.Bid, oldBook.GetBids(), newBook.GetBids())
 	walk(diffs, common.Ask, oldBook.GetAsks(), newBook.GetAsks())
 }
 
 // walk down the book depth generating insert/delete/modify diffs
-func walk(diffs chan common.DepthDiff, side common.Side, oldOrders, newOrders <-chan common.Order) {
+func walk(diffs chan common.Diff, side common.Side, oldOrders, newOrders <-chan common.Order) {
 	old, oldOk := <-oldOrders
 	new, newOk := <-newOrders
 

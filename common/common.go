@@ -14,7 +14,7 @@ func OrderString(o Order) string {
 	return fmt.Sprintf("%s:%s %f @ %f", o.GetExchange(), o.GetSymbol(), o.GetVolume(), o.GetPrice())
 }
 
-func DepthDiffString(d DepthDiff) string {
+func DiffString(d Diff) string {
 	return fmt.Sprintf("%s:%s %s %f @ %f", d.GetExchange(), d.GetSymbol(), d.GetSide(), d.GetVolume(), d.GetPrice())
 }
 
@@ -22,7 +22,7 @@ func DepthDiffString(d DepthDiff) string {
 func PrintBook(book OrderBook, depth int) {
 	bids := book.GetBids()
 	asks := book.GetAsks()
-	
+
 	bid, bidOk := <-bids
 	ask, askOk := <-asks
 
@@ -33,7 +33,7 @@ func PrintBook(book OrderBook, depth int) {
 		depth--
 	}
 
-    // clean out the rest of the channel
+	// clean out the rest of the channel
 	for bidOk || askOk {
 		bid, bidOk = <-bids
 		ask, askOk = <-asks

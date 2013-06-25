@@ -10,11 +10,11 @@ type CommonBook struct {
 }
 
 type Item struct {
-	DepthDiff
+	Diff
 }
 
 func (i *Item) Less(than llrb.Item) bool {
-	that := than.(DepthDiff)
+	that := than.(Diff)
 
 	if i.GetPrice() < that.GetPrice() {
 		return true
@@ -66,7 +66,7 @@ func (c *CommonBook) GetAsks() <-chan Order {
 	return orders
 }
 
-func (c *CommonBook) ApplyDiff(diff DepthDiff) {
+func (c *CommonBook) ApplyDiff(diff Diff) {
 	switch diff.GetSide() {
 	case Bid:
 		updateTree(c.bids, diff)
@@ -77,7 +77,7 @@ func (c *CommonBook) ApplyDiff(diff DepthDiff) {
 	}
 }
 
-func updateTree(tree *llrb.LLRB, diff DepthDiff) {
+func updateTree(tree *llrb.LLRB, diff Diff) {
 	if diff.GetVolume() == 0 {
 		tree.Delete(&Item{diff})
 	} else {

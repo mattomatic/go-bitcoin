@@ -8,9 +8,9 @@ const (
 	ExchangeId = "MTGOX"
 )
 
-func GetDepthDiffChannel() <-chan common.DepthDiff {
+func GetDiffChannel() <-chan common.Diff {
 	// channels are invariant so we have to wrap this
-	depthdiffs := make(chan common.DepthDiff)
+	depthdiffs := make(chan common.Diff)
 	diffs := getDepthDiffChannel()
 
 	go func() {
