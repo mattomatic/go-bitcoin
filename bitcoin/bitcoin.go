@@ -4,22 +4,34 @@ import (
 	"fmt"
 	"github.com/mattomatic/go-bitcoin/algo"
 	"github.com/mattomatic/go-bitcoin/bbo"
-	"github.com/mattomatic/go-bitcoin/common"
+	"time"
 )
 
 func main() {
 	books := bbo.GetCombinedBookChannel()
+    ticks := time.Tick(time.Second)
+    
+    book := <-books
+    now := <-ticks
+    
+    for {
+        select {
+        case book = <-books:
+        case now = <-ticks:
+            pairs := algo.Uncross(book.GetBids(), book.GetAsks())
+            
+            for i, pair := range pairs {
+                fmt.Println(i, pair.String())
+            }           
+            fmt.Println("----------->", now)
+        }
+    }
+}
 
-	for book := range books {
-		common.PrintBook(book, 20)
-		pairs := algo.Uncross(book.GetBids(), book.GetAsks())
-
-		fmt.Println()
-		for _, pair := range pairs {
-			fmt.Println(pair.String())
-		}
-
-		fmt.Println("--------------------")
-
-	}
+func min(a, b int) int {
+    if a < b {
+        return a
+    }
+    
+    return b
 }
