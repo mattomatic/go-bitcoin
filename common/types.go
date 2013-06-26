@@ -7,6 +7,7 @@ import (
 type (
 	Volume   float64
 	Price    float64
+	Amount   float64
 	Exchange string
 	Currency string
 	Symbol   string
