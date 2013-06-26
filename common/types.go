@@ -24,13 +24,16 @@ const (
 	USD Currency = "USD"
 )
 
-type Trade interface {
+type Description interface {
 	GetExchange() Exchange
 	GetSymbol() Symbol
+}
+
+type Trade interface {
+	Description
 	GetTimestamp() time.Time
 	GetVolume() Volume
 	GetPrice() Price
-	GetCurrency() Currency
 	GetTradeId() TradeId
 }
 
@@ -42,8 +45,7 @@ type Ticker interface {
 }
 
 type Order interface {
-	GetExchange() Exchange
-	GetSymbol() Symbol
+	Description
 	GetVolume() Volume
 	GetPrice() Price
 	GetSide() Side
