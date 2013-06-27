@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	ExchangeId = "MTGOX"
+	ExchangeId  = "MTGOX"
+	ExchangeFee = 0.0060
 )
 
 func GetDiffChannel() <-chan common.Diff {

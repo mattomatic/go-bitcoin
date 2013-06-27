@@ -39,3 +39,14 @@ func PrintBook(book OrderBook, depth int) {
 		ask, askOk = <-asks
 	}
 }
+
+// Return a modified price that takes into account exchange fees
+func GetFeeAdjustedPrice(o Order) Price {
+	// Fees result in higher implied ask prices and
+	// lower implied bid prices.
+	if o.GetSide() == Bid {
+		return o.GetPrice() * Price(1-o.GetFee()) // bids are lower
+	}
+
+	return o.GetPrice() * Price(1+o.GetFee())
+}

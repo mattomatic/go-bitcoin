@@ -1,22 +1,21 @@
 package algo
 
 import (
-	"container/list"
 	"github.com/mattomatic/go-bitcoin/common"
 )
 
 func Uncross(bids, asks <-chan common.Order) []Pair {
-	pairs := list.New()
+	pairs := make([]Pair, 0)
 
 	bid, bidOk, bidLimit := next(bids)
 	ask, askOk, askLimit := next(asks)
 
-	for bidOk && askOk && bid.GetPrice() > ask.GetPrice() {
+	for bidOk && askOk && common.GetFeeAdjustedPrice(bid) > common.GetFeeAdjustedPrice(ask) {
 		volume := min(bidLimit, askLimit)
 		bidLimit -= volume
 		askLimit -= volume
 
-		addPairs(pairs, volume, bid, ask)
+		pairs = addPairs(pairs, volume, bid, ask)
 
 		if bidLimit == 0 {
 			bid, bidOk, bidLimit = next(bids)
@@ -33,35 +32,31 @@ func Uncross(bids, asks <-chan common.Order) []Pair {
 		ask, askOk, askLimit = next(asks)
 	}
 
-	return toSlice(pairs)
+	return pairs
 }
 
-func toSlice(pairs *list.List) []Pair {
-	slice := make([]Pair, pairs.Len())
-	index := 0
-	for o := pairs.Front(); o != nil; o = o.Next() {
-		slice[index] = o.Value.(Pair)
-		index++
-	}
-	return slice
-}
-
-func addPairs(pairs *list.List, limit common.Volume, bid, ask common.Order) {
+func addPairs(pairs []Pair, limit common.Volume, bid, ask common.Order) []Pair {
 	buy := getOpposingOrder(ask, limit)
 	sell := getOpposingOrder(bid, limit)
 	credit := getCredit(buy, sell)
 	pair := Pair{Buy: buy, Sell: sell, Credit: credit}
-	pairs.PushBack(pair)
+	return append(pairs, pair)
 }
 
 func getCredit(buy, sell common.Order) common.Amount {
 	volume := common.Amount(buy.GetVolume())
-	credit := common.Amount(sell.GetPrice() - buy.GetPrice())
+	credit := common.Amount(common.GetFeeAdjustedPrice(sell) - common.GetFeeAdjustedPrice(buy))
 	return volume * credit
 }
 
 func getOpposingOrder(order common.Order, volume common.Volume) common.Order {
-	return common.NewOrder(order.GetExchange(), order.GetSymbol(), volume, order.GetPrice(), getOpposingSide(order.GetSide()))
+	return common.NewOrder(
+		order.GetExchange(),
+		order.GetSymbol(),
+		volume,
+		order.GetPrice(),
+		order.GetFee(),
+		getOpposingSide(order.GetSide()))
 }
 
 func getOpposingSide(side common.Side) common.Side {

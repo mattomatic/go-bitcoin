@@ -65,7 +65,7 @@ func TestUncrossTwice(t *testing.T) {
 func getBids(n int, exchange common.Exchange) chan common.Order {
 	orders := make(chan common.Order, n)
 	for i := n; i > 0; i-- {
-		orders <- common.NewOrder(exchange, "BTC", 100, common.Price(i), common.Bid)
+		orders <- common.NewOrder(exchange, "BTC", 100, common.Price(i), 0.0, common.Bid)
 	}
 	close(orders)
 	return orders
@@ -74,7 +74,7 @@ func getBids(n int, exchange common.Exchange) chan common.Order {
 func getAsks(n int, exchange common.Exchange) chan common.Order {
 	orders := make(chan common.Order, n)
 	for i := 1; i <= n; i++ {
-		orders <- common.NewOrder(exchange, "BTC", 100, common.Price(i), common.Ask)
+		orders <- common.NewOrder(exchange, "BTC", 100, common.Price(i), 0.0, common.Ask)
 	}
 	close(orders)
 	return orders

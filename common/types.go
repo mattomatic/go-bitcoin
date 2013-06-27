@@ -7,6 +7,7 @@ import (
 type (
 	Volume   float64
 	Price    float64
+	Fee      float64
 	Amount   float64
 	Exchange string
 	Currency string
@@ -48,6 +49,7 @@ type Order interface {
 	Description
 	GetVolume() Volume
 	GetPrice() Price
+	GetFee() Fee
 	GetSide() Side
 }
 

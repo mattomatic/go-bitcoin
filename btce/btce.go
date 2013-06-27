@@ -8,6 +8,7 @@ import (
 
 const (
 	ExchangeId   = "BTCE"
+	ExchangeFee  = .0020
 	OrderBookUrl = "https://btc-e.com/api/2/btc_usd/depth"
 	PollInterval = time.Millisecond * 500
 )

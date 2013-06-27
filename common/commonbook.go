@@ -16,11 +16,14 @@ type Item struct {
 func (i *Item) Less(than llrb.Item) bool {
 	that := than.(Diff)
 
-	if i.GetPrice() < that.GetPrice() {
+	lhs := GetFeeAdjustedPrice(i)
+	rhs := GetFeeAdjustedPrice(that)
+
+	if lhs < rhs {
 		return true
 	}
 
-	if i.GetPrice() > that.GetPrice() {
+	if lhs > rhs {
 		return false
 	}
 

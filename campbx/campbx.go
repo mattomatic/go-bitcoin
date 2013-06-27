@@ -12,6 +12,7 @@ const (
 	TickerUrl    = "http://campbx.com/api/xticker.php"
 	OrderBookUrl = "http://CampBX.com/api/xdepth.php"
 	PollInterval = time.Second
+	ExchangeFee  = 0.0055
 )
 
 func GetTickerChannel() <-chan *Ticker {

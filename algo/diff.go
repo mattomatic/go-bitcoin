@@ -84,5 +84,6 @@ func makeDiff(order common.Order, volume common.Volume) common.Diff {
 		order.GetSymbol(),
 		volume,
 		order.GetPrice(),
+		order.GetFee(),
 		order.GetSide())
 }

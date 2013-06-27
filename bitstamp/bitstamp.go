@@ -8,6 +8,7 @@ import (
 
 const (
 	ExchangeId   = "BITSTAMP"
+	ExchangeFee  = 0.0050
 	TickerUrl    = "https://bitstamp.net/api/ticker"
 	OrderBookUrl = "https://www.bitstamp.net/api/order_book"
 	PollInterval = time.Second
