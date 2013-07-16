@@ -1,9 +1,9 @@
 package main
 
 import (
-    "github.com/mattomatic/go-bitcoin/strategy"
+	"github.com/mattomatic/go-bitcoin/strategy"
 )
 
 func main() {
-    strategy.Run(0.03)
+	strategy.Run(0.00)
 }
